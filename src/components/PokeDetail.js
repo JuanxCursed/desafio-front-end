@@ -50,7 +50,7 @@ const styles = {
 };
 
 
-const PokeDetail = ({pokemon, onClickPokeBall, classes}) => {
+const PokeDetail = ({pokemon, onClickPokeBall, onClickType, onClickAbility, classes}) => {
     if (!pokemon || pokemon instanceof Promise) {
         return (
             <Typography gutterBottom variant="h5" component="h2">
@@ -93,7 +93,11 @@ const PokeDetail = ({pokemon, onClickPokeBall, classes}) => {
                             </Typography>
                             <Grid item xs={12}>
                                 {pokemon.types.map(type => {
-                                    return <Chip className={classes.chip} key={_.uniqueId()} label={type}/>;
+                                    return <Chip
+                                        className={classes.chip}
+                                        onClick={()=>onClickType({type:type})}
+                                        key={_.uniqueId()}
+                                        label={type}/>;
                                 })}
                             </Grid>
                         </Paper>
@@ -103,7 +107,8 @@ const PokeDetail = ({pokemon, onClickPokeBall, classes}) => {
                             </Typography>
                             <Grid item xs={12}>
                                 {pokemon.abilities.map(ability => {
-                                    return <Chip onClick={() => alert(ability.url)}
+                                    return <Chip onClick={onClickAbility}
+                                                 data-url={ability.url}
                                                  className={classes.chip} key={_.uniqueId()} label={ability.name}/>;
                                 })}
                             </Grid>

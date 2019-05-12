@@ -2,11 +2,13 @@ import _ from 'lodash';
 import pokedex from '../apis/pokeapi';
 import {
     CAPTURE_POKEMON,
+    CLOSE_ABILITY_MODAL,
     FETCH_POKEMON,
     FETCH_POKEMONS,
     MY_POKEDEX,
     RELEASE_POKEMON,
-    SEARCH_TERM_UPDATED
+    SEARCH_TERM_UPDATED,
+    SHOW_ABILITY_MODAL
 } from "./types";
 
 /*
@@ -18,7 +20,8 @@ export const fetchPokemons = (query = null, page = 0, pageSize = 1000) => async 
     if (query && typeof query == 'string') {
         response = [await pokedex.getPokemonByName(query.toLowerCase())];
     } else if (query && typeof query == 'object') {
-        response = [await pokedex.getPokemonByName(query.toLowerCase())];
+        response = (await pokedex.resource(`/api/v2/type/${query.type.toLowerCase()}`))
+            .pokemon.map(({pokemon}) => pokemon);
     } else {
         response = (await pokedex.getPokemonsList({limit: pageSize, offset: pageSize * page})).results;
     }
@@ -31,6 +34,10 @@ export const fetchPokemons = (query = null, page = 0, pageSize = 1000) => async 
 
 export const searchTerm = value => async dispatch => {
     dispatch({type: SEARCH_TERM_UPDATED, payload: value});
+    dispatch(fetchPokemons(value))
+};
+
+export const filterByType = value => async dispatch => {
     dispatch(fetchPokemons(value))
 };
 
@@ -105,6 +112,27 @@ export const releasePokemon = pokemon => async dispatch => {
     });
     dispatch(fetchPokemon({name: pokemon}));
 };
+
+export const showAbilityDetail = url => async dispatch => {
+    let {effect_entries} = await pokedex.resource(url);
+    let response = !effect_entries ?
+        ['No effect information provided.'] :
+        effect_entries.map(entry => entry.short_effect);
+    dispatch({
+        type: SHOW_ABILITY_MODAL,
+        payload: {
+            data: response,
+            show: true
+        }
+    });
+};
+
+export const closeAbilityDetail = () => dispatch => {
+    dispatch({
+        type: CLOSE_ABILITY_MODAL,
+    });
+};
+
 
 /*
 * Helper function to get recursivally the evolution chain

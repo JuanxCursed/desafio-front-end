@@ -1,10 +1,10 @@
 import {
-    CAPTURE_POKEMON,
+    CAPTURE_POKEMON, CLOSE_ABILITY_MODAL,
     FETCH_POKEMON,
     FETCH_POKEMONS,
     MY_POKEDEX,
     RELEASE_POKEMON,
-    SEARCH_TERM_UPDATED
+    SEARCH_TERM_UPDATED, SHOW_ABILITY_MODAL
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -12,6 +12,10 @@ const INITIAL_STATE = {
     pokemons: [],
     selected: null,
     term: '',
+    dialog:{
+        show:false,
+        data:[]
+    }
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -22,6 +26,10 @@ export default (state = INITIAL_STATE, action) => {
             return {...state, ...{term: action.payload}};
         case FETCH_POKEMON:
             return {...state, ...{selected: action.payload}};
+        case SHOW_ABILITY_MODAL:
+            return {...state, ...{dialog: action.payload}};
+        case CLOSE_ABILITY_MODAL:
+            return {...state, ...{dialog: INITIAL_STATE.dialog}};
         case MY_POKEDEX:
         case CAPTURE_POKEMON:
         case RELEASE_POKEMON:

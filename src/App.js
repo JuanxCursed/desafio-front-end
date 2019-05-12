@@ -7,8 +7,23 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
 
-import {capturePokemon, fetchPokemon, fetchPokemons, myPokedex, releasePokemon, searchTerm} from './actions'
+import {
+    capturePokemon,
+    closeAbilityDetail,
+    fetchPokemon,
+    fetchPokemons,
+    filterByType,
+    myPokedex,
+    releasePokemon,
+    searchTerm,
+    showAbilityDetail
+} from './actions'
 
 import PokeList from "./components/PokeList";
 import PokeDetail from "./components/PokeDetail";
@@ -57,6 +72,38 @@ class App extends React.Component {
         this.props.searchTerm(e.target.value);
     };
 
+    filterByType = async value => {
+        this.props.filterByType(value);
+    };
+
+    showAbilityEffects = async e => {
+        this.props.showAbilityDetail(e.target.parentElement.dataset.url)
+    };
+
+    closeAbilityEffects = () => {
+        this.props.closeAbilityDetail();
+    };
+
+    renderAbilityEffects = () => {
+        if (this.props.dialog.show) {
+            let {data, show} = this.props.dialog;
+            return (
+                <Dialog onClose={this.closeAbilityEffects} open={show}>
+                    <DialogTitle>Ability Effects</DialogTitle>
+                    <div>
+                        <List>
+                            {data.map(effect => (
+                                <ListItem key={effect}>
+                                    <ListItemText primary={effect}/>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </div>
+                </Dialog>
+            );
+        }
+    };
+
 
     render() {
         return (
@@ -69,6 +116,7 @@ class App extends React.Component {
                         </Typography>
                     </Toolbar>
                 </AppBar>
+                {this.renderAbilityEffects()}
                 <Grid container style={{marginTop: '25px'}} spacing={8} className={this.props.classes.layout}>
                     <Grid item xs={12} sm={6}>
                         <Typography variant="h6" color="inherit">
@@ -96,6 +144,8 @@ class App extends React.Component {
                     </Grid>
                     <Grid item xs={12} sm={6} className={this.props.classes.selectedContainer}>
                         <PokeDetail
+                            onClickAbility={this.showAbilityEffects}
+                            onClickType={this.filterByType}
                             onClickPokeBall={this.togglePokemon}
                             pokemon={this.props.selected}/>
                     </Grid>
@@ -108,10 +158,10 @@ class App extends React.Component {
 const mapStateToProps = ({pokemons}) => {
     return {
         catched: pokemons.catched,
-        owned: pokemons.owned,
         pokemons: pokemons.pokemons,
         selected: pokemons.selected,
         term: pokemons.term,
+        dialog: pokemons.dialog
     }
 };
 
@@ -121,5 +171,8 @@ export default connect(mapStateToProps, {
     searchTerm,
     myPokedex,
     capturePokemon,
-    releasePokemon
+    showAbilityDetail,
+    closeAbilityDetail,
+    releasePokemon,
+    filterByType
 })(withStyles(styles)(App));

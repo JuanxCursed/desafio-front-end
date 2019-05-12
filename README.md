@@ -1,26 +1,27 @@
 This project is a test of development knowledge in React-Redux .
 ### Pokedex
 Using [PokeAPI v2](https://pokeapi.co/docsv2/#) we implement a lot of patterns and adiciontal libraries making a Pokedex with the follow features:
-- List all pokemons with filter by name and Dex ID. _(TODO: list pokemons by type)_
+- List all pokemons with filter by name, Dex ID and per Type.
 - Manage my own Pokedex Library by adding and removing Pokemons
 - Show detailed information of a selected Pokemon such as:
     - Name
     - Image
     - Evolution chain
-    - Abilities and short effects _(TODO: this last one)_
+    - Abilities and show short effects
     - Types
     - Stats info
 
-***TODO***
- - Make pokemons list filter by Pokemon type
- - Show ability effect on click event
+***TODO***  
  - Custom Pokemon image upload
  
 ### How to setup and run
 Just run `yarn install` and `npm start`, no addictional actions required.
 
-### Tests
-`npm test` yep, that is it.
+### Tests _(TODO)_
+You have 3 options
+`npm test` 
+`yarn test` 
+`jest` 
 
 
 #### Libaries used in this project
@@ -33,3 +34,7 @@ Just run `yarn install` and `npm start`, no addictional actions required.
  - [react](https://github.com/facebook/react)
  - [redux](https://redux.js.org/introduction/getting-started)
  - [redux-thunk](https://github.com/reduxjs/redux-thunk)
+
+#### References
+- [http://reactpoke.thebigoh.net/](http://reactpoke.thebigoh.net/)
+- [https://pokedex.theleakycauldronblog.com/](https://pokedex.theleakycauldronblog.com/)
